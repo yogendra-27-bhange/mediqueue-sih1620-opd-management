@@ -32,9 +32,8 @@ export default function HomePage() {
             icon={<CalendarPlus className="h-10 w-10 text-accent" />}
             title="Easy Appointment Booking"
             description="Intuitive calendar-based scheduling makes booking OPD appointments a breeze for patients."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Person easily booking an appointment on a phone or computer with a calendar interface"
-            aiHint="appointment booking"
+            imageSrc="/images/features/easy-appointment-booking.png"
+            imageAlt="Illustration of a calendar with a plus icon, symbolizing easy appointment booking"
           />
           <FeatureCard
             icon={<ShieldCheck className="h-10 w-10 text-accent" />}
@@ -100,7 +99,7 @@ interface FeatureCardProps {
   description: string;
   imageSrc: string;
   imageAlt: string;
-  aiHint: string;
+  aiHint?: string; // aiHint is now optional
 }
 
 function FeatureCard({ icon, title, description, imageSrc, imageAlt, aiHint }: FeatureCardProps) {
@@ -112,7 +111,7 @@ function FeatureCard({ icon, title, description, imageSrc, imageAlt, aiHint }: F
         </div>
         <CardTitle className="font-headline text-xl">{title}</CardTitle>
       </CardHeader>
-      <Image src={imageSrc} alt={imageAlt} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={aiHint} />
+      <Image src={imageSrc} alt={imageAlt} width={600} height={400} className="w-full h-48 object-cover" {...(aiHint && { 'data-ai-hint': aiHint })} />
       <CardContent className="pt-4">
         <CardDescription className="text-center">{description}</CardDescription>
       </CardContent>
