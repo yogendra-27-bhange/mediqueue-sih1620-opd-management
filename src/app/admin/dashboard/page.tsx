@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Lightbulb, Users, BriefcaseMedical, BedDouble, ListChecks, Settings, Hospital as HospitalIcon, Ambulance } from 'lucide-react';
 
