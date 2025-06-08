@@ -33,22 +33,21 @@ export default function HomePage() {
             title="Easy Appointment Booking"
             description="Intuitive calendar-based scheduling makes booking OPD appointments a breeze for patients."
             imageSrc="/images/features/easy-appointment-booking.png"
-            imageAlt="Illustration of a calendar with a plus icon, symbolizing easy appointment booking"
+            imageAlt="Person easily booking an appointment on a phone or computer with a calendar interface"
           />
           <FeatureCard
             icon={<ShieldCheck className="h-10 w-10 text-accent" />}
             title="Role-Based Access"
             description="Secure access for Admins, Doctors, and Patients with Firebase Authentication."
             imageSrc="/images/features/role-based-access.png"
-            imageAlt="Shield icon with a checkmark next to text 'Role-Based Access', symbolizing secure, permissioned access"
+            imageAlt="Illustration of different user roles (admin, doctor, patient) with distinct icons, interacting with a secure system interface"
           />
           <FeatureCard
             icon={<Stethoscope className="h-10 w-10 text-accent" />}
             title="Doctor Dashboards"
             description="Doctors can easily view schedules, manage appointments, and update statuses."
-            imageSrc="https://placehold.co/600x400.png?text=Doctor+Dashboard"
-            imageAlt="Doctor using a tablet or computer to view a clean and organized dashboard interface, with icons for schedule and patient info"
-            aiHint="doctor dashboard"
+            imageSrc="/images/features/doctor-dashboards.png"
+            imageAlt="Laptop screen showing a doctor's dashboard with schedule and patient information icons"
           />
           <FeatureCard
             icon={<BrainCircuit className="h-10 w-10 text-accent" />}
