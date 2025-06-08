@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CalendarPlus, ShieldCheck, Stethoscope, Users, BrainCircuit, History, MessageSquareHeart } from 'lucide-react';
+import { CalendarPlus, ShieldCheck, Stethoscope, BrainCircuit, History, MessageSquareHeart } from 'lucide-react';
 import Image from 'next/image';
 
 export default function HomePage() {
@@ -33,35 +33,34 @@ export default function HomePage() {
             title="Easy Appointment Booking"
             description="Intuitive calendar-based scheduling makes booking OPD appointments a breeze for patients."
             imageSrc="/images/features/easy-appointment-booking.png"
-            imageAlt="Person easily booking an appointment on a phone or computer with a calendar interface"
+            imageAlt="A person using a mobile phone to book an appointment on a calendar interface, with a checkmark indicating success."
           />
           <FeatureCard
             icon={<ShieldCheck className="h-10 w-10 text-accent" />}
             title="Role-Based Access"
             description="Secure access for Admins, Doctors, and Patients with Firebase Authentication."
             imageSrc="/images/features/role-based-access.png"
-            imageAlt="Illustration of different user roles (admin, doctor, patient) with distinct icons, interacting with a secure system interface"
+            imageAlt="Three figures representing admin, doctor, and patient roles, each with a key, interacting with a secure system shield."
           />
           <FeatureCard
             icon={<Stethoscope className="h-10 w-10 text-accent" />}
             title="Doctor Dashboards"
             description="Doctors can easily view schedules, manage appointments, and update statuses."
             imageSrc="/images/features/doctor-dashboards.png"
-            imageAlt="Laptop screen showing a doctor's dashboard with schedule and patient information icons"
+            imageAlt="A doctor reviewing a patient's chart on a tablet, with medical icons in the background."
           />
           <FeatureCard
             icon={<BrainCircuit className="h-10 w-10 text-accent" />}
             title="Smart Slot Allocation"
             description="AI-powered suggestions for optimal appointment slots to reduce wait times."
-            imageSrc="https://placehold.co/600x400.png?text=AI+Scheduling"
-            imageAlt="Abstract representation of AI or a brain with gears or a calendar, symbolizing intelligent scheduling and optimization"
-            aiHint="AI scheduling"
+            imageSrc="/images/features/smart-slot-allocation.png"
+            imageAlt="A human head silhouette with a gear inside, next to the text 'Smart Slot Allocation', representing AI-powered scheduling."
           />
            <FeatureCard
             icon={<History className="h-10 w-10 text-accent" />}
             title="Appointment History"
             description="Patients can view their complete appointment history and doctor's notes."
-            imageSrc="https://placehold.co/600x400.png?text=Medical+Records"
+            imageSrc="https://placehold.co/600x400.png"
             imageAlt="Patient viewing a list of past medical appointments or records on a secure digital device or interface"
             aiHint="medical history"
           />
@@ -69,7 +68,7 @@ export default function HomePage() {
             icon={<MessageSquareHeart className="h-10 w-10 text-accent" />}
             title="Timely Reminders"
             description="Automated SMS/Email reminders for appointments and status updates."
-            imageSrc="https://placehold.co/600x400.png?text=Notification+Alert"
+            imageSrc="https://placehold.co/600x400.png"
             imageAlt="Smartphone displaying a notification or reminder message for an upcoming medical appointment, with a calendar icon"
             aiHint="appointment reminder"
           />
