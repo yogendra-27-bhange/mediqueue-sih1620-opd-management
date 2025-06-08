@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 
 export function Header() {
   // Simulate user role - in a real app, this would come from auth context
-  const userRole = 'patient'; // Can be 'patient', 'doctor', 'admin', or null
+  const userRole = 'admin'; // Can be 'patient', 'doctor', 'admin', or null
 
   const getDashboardLink = () => {
     if (userRole === 'admin') return '/admin/dashboard';
