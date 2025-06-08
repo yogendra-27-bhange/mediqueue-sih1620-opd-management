@@ -39,40 +39,39 @@ export default function HomePage() {
             icon={<ShieldCheck className="h-10 w-10 text-accent" />}
             title="Role-Based Access"
             description="Secure access for Admins, Doctors, and Patients with Firebase Authentication."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Abstract image representing digital security and user roles, perhaps with lock icons and user profiles"
-            aiHint="digital security"
+            imageSrc="/images/features/role-based-access.png"
+            imageAlt="Shield icon with a checkmark next to text 'Role-Based Access', symbolizing secure, permissioned access"
           />
           <FeatureCard
             icon={<Stethoscope className="h-10 w-10 text-accent" />}
             title="Doctor Dashboards"
             description="Doctors can easily view schedules, manage appointments, and update statuses."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Doctor using a tablet or computer to view a clean and organized dashboard interface"
+            imageSrc="https://placehold.co/600x400.png?text=Doctor+Dashboard"
+            imageAlt="Doctor using a tablet or computer to view a clean and organized dashboard interface, with icons for schedule and patient info"
             aiHint="doctor dashboard"
           />
           <FeatureCard
             icon={<BrainCircuit className="h-10 w-10 text-accent" />}
             title="Smart Slot Allocation"
             description="AI-powered suggestions for optimal appointment slots to reduce wait times."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Abstract representation of AI or a brain with gears or a calendar, symbolizing intelligent scheduling"
+            imageSrc="https://placehold.co/600x400.png?text=AI+Scheduling"
+            imageAlt="Abstract representation of AI or a brain with gears or a calendar, symbolizing intelligent scheduling and optimization"
             aiHint="AI scheduling"
           />
            <FeatureCard
             icon={<History className="h-10 w-10 text-accent" />}
             title="Appointment History"
             description="Patients can view their complete appointment history and doctor's notes."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Patient viewing a list of past medical appointments or records on a device"
+            imageSrc="https://placehold.co/600x400.png?text=Medical+Records"
+            imageAlt="Patient viewing a list of past medical appointments or records on a secure digital device or interface"
             aiHint="medical history"
           />
            <FeatureCard
             icon={<MessageSquareHeart className="h-10 w-10 text-accent" />}
             title="Timely Reminders"
             description="Automated SMS/Email reminders for appointments and status updates."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Smartphone displaying a notification or reminder message for an appointment"
+            imageSrc="https://placehold.co/600x400.png?text=Notification+Alert"
+            imageAlt="Smartphone displaying a notification or reminder message for an upcoming medical appointment, with a calendar icon"
             aiHint="appointment reminder"
           />
         </div>
@@ -99,7 +98,7 @@ interface FeatureCardProps {
   description: string;
   imageSrc: string;
   imageAlt: string;
-  aiHint?: string; // aiHint is now optional
+  aiHint?: string;
 }
 
 function FeatureCard({ icon, title, description, imageSrc, imageAlt, aiHint }: FeatureCardProps) {
