@@ -1,12 +1,12 @@
 
 import Link from 'next/link';
-import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance, UserCircle } from 'lucide-react';
+import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance, UserCircle, Pill } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export function Header() {
   // Simulate user role - in a real app, this would come from auth context
-  const userRole = 'admin'; // Can be 'patient', 'doctor', 'admin', or null
+  const userRole = 'patient'; // Can be 'patient', 'doctor', 'admin', or null
 
   const getDashboardLink = () => {
     if (userRole === 'admin') return '/admin/dashboard';
@@ -15,7 +15,7 @@ export function Header() {
     return '/login'; // Default if no role or specific dashboard, direct to login
   };
 
-  const profileLink = '/profile'; // Generic profile link for now
+  const profileLink = '/profile'; 
 
   return (
     <header className="bg-card border-b border-border shadow-sm sticky top-0 z-50">
@@ -48,6 +48,9 @@ export function Header() {
                 <Link href="/patient/find-hospital" className="font-medium flex items-center"><MapPin className="mr-1 h-4 w-4"/> Find Hospital</Link>
               </Button>
               <Button variant="ghost" asChild className="hidden md:inline-flex">
+                <Link href="/patient/find-pharmacy" className="font-medium flex items-center"><Pill className="mr-1 h-4 w-4"/> Find Pharmacy</Link>
+              </Button>
+              <Button variant="ghost" asChild className="hidden md:inline-flex">
                 <Link href="/patient/bed-availability" className="font-medium flex items-center"><BedDouble className="mr-1 h-4 w-4"/> Bed Availability</Link>
               </Button>
             </>
@@ -76,6 +79,7 @@ export function Header() {
                   <DropdownMenuItem asChild><Link href="/patient/book-appointment">Book Appointment</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/patient/appointment-history">Appointment History</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/patient/find-hospital">Find Nearby Hospital</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/patient/find-pharmacy">Find Nearby Pharmacy</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/patient/bed-availability">Bed Availability</Link></DropdownMenuItem>
                 </>
               )}
@@ -146,5 +150,3 @@ export function Header() {
     </header>
   );
 }
-
-    
