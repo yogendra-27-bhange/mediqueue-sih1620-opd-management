@@ -31,48 +31,48 @@ export default function HomePage() {
             icon={<CalendarPlus className="h-10 w-10 text-accent" />}
             title="Easy Appointment Booking"
             description="Intuitive calendar-based scheduling makes booking OPD appointments a breeze for patients."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Calendar booking"
+            imageSrc="https://placehold.co/600x400.png?text=Easy+Booking"
+            imageAlt="Calendar booking interface"
             aiHint="calendar schedule"
           />
           <FeatureCard
             icon={<ShieldCheck className="h-10 w-10 text-accent" />}
             title="Role-Based Access"
             description="Secure access for Admins, Doctors, and Patients with Firebase Authentication."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Security shield"
+            imageSrc="https://placehold.co/600x400.png?text=Secure+Access"
+            imageAlt="Security shield representing role-based access"
             aiHint="security access"
           />
           <FeatureCard
             icon={<Stethoscope className="h-10 w-10 text-accent" />}
             title="Doctor Dashboards"
             description="Doctors can easily view schedules, manage appointments, and update statuses."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Doctor with tablet"
+            imageSrc="https://placehold.co/600x400.png?text=Doctor+Dashboard"
+            imageAlt="Doctor reviewing dashboard on a tablet"
             aiHint="doctor computer"
           />
           <FeatureCard
             icon={<BrainCircuit className="h-10 w-10 text-accent" />}
             title="Smart Slot Allocation"
             description="AI-powered suggestions for optimal appointment slots to reduce wait times."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="AI brain"
+            imageSrc="https://placehold.co/600x400.png?text=AI+Scheduling"
+            imageAlt="Abstract representation of AI and scheduling"
             aiHint="artificial intelligence"
           />
            <FeatureCard
             icon={<History className="h-10 w-10 text-accent" />}
             title="Appointment History"
             description="Patients can view their complete appointment history and doctor's notes."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Medical records"
+            imageSrc="https://placehold.co/600x400.png?text=Medical+History"
+            imageAlt="Illustration of medical records or history"
             aiHint="medical records"
           />
            <FeatureCard
             icon={<MessageSquareHeart className="h-10 w-10 text-accent" />}
             title="Timely Reminders"
             description="Automated SMS/Email reminders for appointments and status updates."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Notification bell"
+            imageSrc="https://placehold.co/600x400.png?text=Notifications"
+            imageAlt="Notification bell icon for reminders"
             aiHint="notification reminder"
           />
         </div>
