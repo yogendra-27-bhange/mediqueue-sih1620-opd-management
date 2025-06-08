@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance } from 'lucide-react';
+import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance, UserCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
@@ -11,8 +11,11 @@ export function Header() {
   const getDashboardLink = () => {
     if (userRole === 'admin') return '/admin/dashboard';
     if (userRole === 'doctor') return '/doctor/dashboard';
-    return '/patient/dashboard'; // Default to patient or if role is null
+    if (userRole === 'patient') return '/patient/dashboard';
+    return '/login'; // Default if no role or specific dashboard, direct to login
   };
+
+  const profileLink = '/profile'; // Generic profile link for now
 
   return (
     <header className="bg-card border-b border-border shadow-sm sticky top-0 z-50">
@@ -100,23 +103,23 @@ export function Header() {
               {!userRole && (
                 <>
                   <DropdownMenuItem asChild>
-                    <Link href="/login" className="flex items-center gap-2"><LogIn /> Login</Link>
+                    <Link href="/login" className="flex items-center gap-2"><LogIn className="h-4 w-4" /> Login</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/signup" className="flex items-center gap-2"><UserPlus /> Sign Up</Link>
+                    <Link href="/signup" className="flex items-center gap-2"><UserPlus className="h-4 w-4" /> Sign Up</Link>
                   </DropdownMenuItem>
                 </>
               )}
               {userRole && (
-                 <DropdownMenuItem>
-                    {/* Placeholder for Logout Button/Profile Link */}
-                    <span className="text-muted-foreground">Logout (not implemented)</span>
+                 <DropdownMenuItem asChild>
+                    <Link href={profileLink} className="flex items-center gap-2"><UserCircle className="h-4 w-4" /> Profile</Link>
                   </DropdownMenuItem>
+                 // The actual "Logout" functionality will be on the profile page.
               )}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Auth buttons for larger screens, shown if no userRole */}
+          {/* Auth buttons for larger screens */}
           {!userRole && (
             <>
               <Button variant="ghost" asChild className="hidden md:inline-flex">
@@ -133,8 +136,9 @@ export function Header() {
           )}
            {userRole && (
              <Button variant="ghost" asChild className="hidden md:inline-flex">
-                {/* Placeholder for Logout Button/Profile Link on large screens */}
-                <span className="text-sm text-muted-foreground">Logout</span>
+                <Link href={profileLink} className="flex items-center gap-1">
+                  <UserCircle className="h-4 w-4" /> Profile
+                </Link>
             </Button>
            )}
         </nav>
