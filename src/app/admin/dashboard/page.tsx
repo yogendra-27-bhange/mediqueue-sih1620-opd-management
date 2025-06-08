@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Lightbulb, Users, BriefcaseMedical, BedDouble, ListChecks, Settings, Hospital as HospitalIcon } from 'lucide-react';
+import { Lightbulb, Users, BriefcaseMedical, BedDouble, ListChecks, Settings, Hospital as HospitalIcon, Ambulance } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const features = [
@@ -42,9 +42,15 @@ export default function AdminDashboardPage() {
       link: "/admin/opd-queue",
       icon: <ListChecks className="h-8 w-8 text-primary" />,
     },
+    {
+      title: "Ambulance Services",
+      description: "Manage ambulance fleet and status.",
+      link: "/admin/ambulance-services",
+      icon: <Ambulance className="h-8 w-8 text-primary" />,
+    },
      {
-      title: "System Settings",
-      description: "Configure application settings and preferences.",
+      title: "System & Hospital Settings",
+      description: "Configure application and hospital details.",
       link: "/admin/settings",
       icon: <Settings className="h-8 w-8 text-primary" />,
     },
@@ -62,22 +68,26 @@ export default function AdminDashboardPage() {
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {features.map((feature) => (
-          <Card key={feature.title} className="hover:shadow-xl transition-shadow duration-300">
+          <Card key={feature.title} className="hover:shadow-xl transition-shadow duration-300 flex flex-col">
             <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2">
               {feature.icon}
               <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-grow">
               <p className="text-sm text-muted-foreground mb-4">{feature.description}</p>
+            </CardContent>
+            <CardFooter>
               <Button asChild variant="outline" className="w-full">
                 <Link href={feature.link}>Go to {feature.title}</Link>
               </Button>
-            </CardContent>
+            </CardFooter>
           </Card>
         ))}
       </div>
     </div>
   );
 }
+
+    

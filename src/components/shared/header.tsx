@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu } from 'lucide-react';
+import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
@@ -26,9 +26,12 @@ export function Header() {
           <Button variant="ghost" asChild className="hidden sm:inline-flex">
             <Link href="/" className="font-medium">Home</Link>
           </Button>
-          <Button variant="ghost" asChild className="hidden sm:inline-flex">
-            <Link href={getDashboardLink()} className="font-medium">Dashboard</Link>
-          </Button>
+          
+          { userRole && (
+            <Button variant="ghost" asChild className="hidden sm:inline-flex">
+                <Link href={getDashboardLink()} className="font-medium">Dashboard</Link>
+            </Button>
+          )}
           
           {userRole === 'patient' && (
             <>
@@ -57,13 +60,14 @@ export function Header() {
           {/* Role-based dropdown for smaller screens or more options */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="font-medium md:hidden">Menu</Button>
+              <Button variant="outline" className="font-medium md:hidden">Menu</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>Navigation</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild><Link href="/" >Home</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link href={getDashboardLink()} >Dashboard</Link></DropdownMenuItem>
+              {userRole && <DropdownMenuItem asChild><Link href={getDashboardLink()} >Dashboard</Link></DropdownMenuItem>}
+              
               {userRole === 'patient' && (
                 <>
                   <DropdownMenuItem asChild><Link href="/patient/book-appointment">Book Appointment</Link></DropdownMenuItem>
@@ -74,7 +78,8 @@ export function Header() {
               )}
                {userRole === 'doctor' && (
                 <>
-                  {/* Add doctor specific mobile links here */}
+                  {/* Add doctor specific mobile links here if any, e.g., view schedule */}
+                   <DropdownMenuItem asChild><Link href="/doctor/dashboard">My Schedule</Link></DropdownMenuItem>
                 </>
               )}
               {userRole === 'admin' && (
@@ -84,34 +89,58 @@ export function Header() {
                   <DropdownMenuItem asChild><Link href="/admin/bed-availability">Bed Availability</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/admin/admissions">Admissions</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/admin/opd-queue">OPD Queue</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/admin/ambulance-services">Ambulance Services</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/admin/smart-slot-allocation">Smart Slots</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/admin/settings">System Settings</Link></DropdownMenuItem>
                 </>
               )}
+
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Account</DropdownMenuLabel>
-               <DropdownMenuItem asChild>
-                <Link href="/login" className="flex items-center gap-2"><LogIn /> Login</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/signup" className="flex items-center gap-2"><UserPlus /> Sign Up</Link>
-              </DropdownMenuItem>
+              {!userRole && (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link href="/login" className="flex items-center gap-2"><LogIn /> Login</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/signup" className="flex items-center gap-2"><UserPlus /> Sign Up</Link>
+                  </DropdownMenuItem>
+                </>
+              )}
+              {userRole && (
+                 <DropdownMenuItem>
+                    {/* Placeholder for Logout Button/Profile Link */}
+                    <span className="text-muted-foreground">Logout (not implemented)</span>
+                  </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Auth buttons for larger screens */}
-          <Button variant="ghost" asChild className="hidden md:inline-flex">
-            <Link href="/login" className="flex items-center gap-1">
-              <LogIn className="h-4 w-4" /> Login
-            </Link>
-          </Button>
-          <Button variant="default" asChild className="hidden md:inline-flex">
-            <Link href="/signup" className="flex items-center gap-1">
-              <UserPlus className="h-4 w-4" /> Sign Up
-            </Link>
-          </Button>
+          {/* Auth buttons for larger screens, shown if no userRole */}
+          {!userRole && (
+            <>
+              <Button variant="ghost" asChild className="hidden md:inline-flex">
+                <Link href="/login" className="flex items-center gap-1">
+                  <LogIn className="h-4 w-4" /> Login
+                </Link>
+              </Button>
+              <Button variant="default" asChild className="hidden md:inline-flex bg-accent text-accent-foreground hover:bg-accent/90">
+                <Link href="/signup" className="flex items-center gap-1">
+                  <UserPlus className="h-4 w-4" /> Sign Up
+                </Link>
+              </Button>
+            </>
+          )}
+           {userRole && (
+             <Button variant="ghost" asChild className="hidden md:inline-flex">
+                {/* Placeholder for Logout Button/Profile Link on large screens */}
+                <span className="text-sm text-muted-foreground">Logout</span>
+            </Button>
+           )}
         </nav>
       </div>
     </header>
   );
 }
+
+    
