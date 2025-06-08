@@ -1,7 +1,8 @@
+
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarPlus, History, UserCircle, FileText, MessageCircle } from 'lucide-react';
+import { CalendarPlus, History, UserCircle, FileText, MessageCircle, MapPin } from 'lucide-react';
 import Image from 'next/image';
 
 // Mock data for upcoming appointments
@@ -34,6 +35,7 @@ export default function PatientDashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <ActionCard title="Book New Appointment" icon={<CalendarPlus className="h-6 w-6" />} link="/patient/book-appointment" />
           <ActionCard title="View Appointment History" icon={<History className="h-6 w-6" />} link="/patient/appointment-history" />
+          <ActionCard title="Find Nearby Hospital" icon={<MapPin className="h-6 w-6" />} link="/patient/find-hospital" />
           <ActionCard title="Manage Profile" icon={<UserCircle className="h-6 w-6" />} link="/patient/profile" />
         </div>
       </section>
