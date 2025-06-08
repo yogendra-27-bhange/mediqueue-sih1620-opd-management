@@ -61,7 +61,7 @@ export default function HomePage() {
             title="Appointment History"
             description="Patients can view their complete appointment history and doctor's notes."
             imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Patient viewing a list of past medical appointments or records on a secure digital device or interface"
+            imageAlt="Patient viewing a list of past medical appointments or records on a secure digital device or interface."
             aiHint="medical history"
           />
            <FeatureCard
@@ -69,7 +69,7 @@ export default function HomePage() {
             title="Timely Reminders"
             description="Automated SMS/Email reminders for appointments and status updates."
             imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Smartphone displaying a notification or reminder message for an upcoming medical appointment, with a calendar icon"
+            imageAlt="Smartphone displaying a notification or reminder message for an upcoming medical appointment, with a calendar icon."
             aiHint="appointment reminder"
           />
         </div>
