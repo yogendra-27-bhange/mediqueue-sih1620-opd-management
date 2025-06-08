@@ -1,7 +1,8 @@
+
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Lightbulb, Users, BriefcaseMedical, BedDouble, ListChecks, Settings } from 'lucide-react';
+import { Lightbulb, Users, BriefcaseMedical, BedDouble, ListChecks, Settings, Hospital as HospitalIcon } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const features = [
@@ -28,6 +29,12 @@ export default function AdminDashboardPage() {
       description: "Update and monitor hospital bed status.",
       link: "/admin/bed-availability",
       icon: <BedDouble className="h-8 w-8 text-primary" />,
+    },
+    {
+      title: "Admissions Management",
+      description: "Track patient admissions and discharges.",
+      link: "/admin/admissions",
+      icon: <HospitalIcon className="h-8 w-8 text-primary" />,
     },
     {
       title: "OPD Queue Monitoring",

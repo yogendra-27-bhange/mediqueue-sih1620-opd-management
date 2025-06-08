@@ -1,12 +1,12 @@
 
 import Link from 'next/link';
-import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin } from 'lucide-react';
+import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export function Header() {
   // Simulate user role - in a real app, this would come from auth context
-  const userRole = 'patient'; // Can be 'patient', 'doctor', 'admin', or null
+  const userRole = 'admin'; // Can be 'patient', 'doctor', 'admin', or null
 
   const getDashboardLink = () => {
     if (userRole === 'admin') return '/admin/dashboard';
@@ -77,6 +77,10 @@ export function Header() {
                  <>
                   <DropdownMenuItem asChild><Link href="/admin/manage-doctors">Manage Doctors</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/admin/manage-departments">Manage Departments</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/admin/bed-availability">Bed Availability</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/admin/admissions">Admissions</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/admin/opd-queue">OPD Queue</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/admin/smart-slot-allocation">Smart Slots</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/admin/settings">System Settings</Link></DropdownMenuItem>
                 </>
               )}
@@ -107,4 +111,3 @@ export function Header() {
     </header>
   );
 }
-
