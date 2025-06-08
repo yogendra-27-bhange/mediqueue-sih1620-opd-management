@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 
 export function Header() {
   // Simulate user role - in a real app, this would come from auth context
-  const userRole = 'admin'; // Can be 'patient', 'doctor', 'admin', or null
+  const userRole = 'patient'; // Can be 'patient', 'doctor', 'admin', or null
 
   const getDashboardLink = () => {
     if (userRole === 'admin') return '/admin/dashboard';
@@ -41,6 +41,9 @@ export function Header() {
                <Button variant="ghost" asChild className="hidden md:inline-flex">
                 <Link href="/patient/find-hospital" className="font-medium flex items-center"><MapPin className="mr-1 h-4 w-4"/> Find Hospital</Link>
               </Button>
+              <Button variant="ghost" asChild className="hidden md:inline-flex">
+                <Link href="/patient/bed-availability" className="font-medium flex items-center"><BedDouble className="mr-1 h-4 w-4"/> Bed Availability</Link>
+              </Button>
             </>
           )}
 
@@ -66,6 +69,7 @@ export function Header() {
                   <DropdownMenuItem asChild><Link href="/patient/book-appointment">Book Appointment</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/patient/appointment-history">Appointment History</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link href="/patient/find-hospital">Find Nearby Hospital</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/patient/bed-availability">Bed Availability</Link></DropdownMenuItem>
                 </>
               )}
                {userRole === 'doctor' && (
