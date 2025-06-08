@@ -7,18 +7,18 @@ import Image from 'next/image';
 export default function ProfilePage() {
   // In a real app, user data and role would come from authentication context
   const mockUserData = {
-    name: 'Patient Name', // Or "Doctor Name" / "Admin Name"
-    email: 'user@example.com',
-    role: 'patient', // This would be dynamic: 'patient', 'doctor', or 'admin'
+    name: 'Dr. Alex Ray', // Changed to a doctor's name
+    email: 'dr.alex@example.com', // Changed email
+    role: 'doctor', // CHANGED to 'doctor' to show doctor-specific info
     avatar: 'https://placehold.co/150x150.png',
     // Patient specific
     medicalHistorySummary: 'No significant medical history noted. Annual checkups recommended.',
     bloodGroup: 'O+',
     // Doctor specific
     specialization: 'Cardiology',
-    experience: '10+ years',
+    experience: '12+ years', // Slightly changed experience
     // Admin specific
-    adminId: 'ADM001',
+    adminId: 'ADM789', // Changed admin ID
   };
 
   return (
@@ -32,7 +32,7 @@ export default function ProfilePage() {
               width={120} 
               height={120} 
               className="rounded-full border-4 border-primary"
-              data-ai-hint="person avatar" 
+              data-ai-hint="person doctor" 
             />
           </div>
           <CardTitle className="text-3xl font-headline text-primary">{mockUserData.name}</CardTitle>
@@ -82,6 +82,7 @@ export default function ProfilePage() {
           </div>
            <p className="text-xs text-muted-foreground text-center pt-4">
             For demonstration purposes, user data is mocked. In a real application, this would be dynamic based on the logged-in user. The "Logout" button is a UI placeholder.
+            To see other role views (e.g., 'patient' or 'admin'), you can edit the `mockUserData.role` and `mockUserData.name` in `src/app/profile/page.tsx`.
           </p>
         </CardContent>
       </Card>
