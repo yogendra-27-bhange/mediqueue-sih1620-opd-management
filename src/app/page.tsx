@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarPlus, ShieldCheck, Stethoscope, BrainCircuit, History, MessageSquareHeart } from 'lucide-react';
-import Image from 'next/image'; // Still needed for other cards
 
 export default function HomePage() {
   return (
@@ -31,47 +30,32 @@ export default function HomePage() {
           <FeatureCard
             icon={<CalendarPlus className="h-10 w-10 text-accent" />}
             title="Easy Appointment Booking"
-            description="Person easily booking an appointment on a phone or computer with a calendar interface"
-            imageSrc="/images/features/easy-appointment-booking.png"
-            imageAlt="Easy appointment booking interface"
-            usePlainImg={true} // Test with plain <img> tag
+            description="Person easily booking an appointment on a phone or computer with a calendar interface."
           />
           <FeatureCard
             icon={<ShieldCheck className="h-10 w-10 text-accent" />}
             title="Role-Based Access"
             description="Three figures representing admin, doctor, and patient roles, each with a key, interacting with a secure system shield."
-            imageSrc="/images/features/role-based-access.png"
-            imageAlt="Secure role-based access control diagram"
           />
           <FeatureCard
             icon={<Stethoscope className="h-10 w-10 text-accent" />}
             title="Doctor Dashboards"
             description="A doctor reviewing a patient's chart on a tablet, with medical icons in the background."
-            imageSrc="/images/features/doctor-dashboards.png"
-            imageAlt="Doctor reviewing patient chart on tablet"
           />
           <FeatureCard
             icon={<BrainCircuit className="h-10 w-10 text-accent" />}
             title="Smart Slot Allocation"
             description="Stylized brain with circuitry connected to a calendar, symbolizing AI-optimized scheduling for appointments."
-            imageSrc="/images/features/smart-slot-allocation.png"
-            imageAlt="AI brain connected to calendar for smart scheduling"
           />
            <FeatureCard
             icon={<History className="h-10 w-10 text-accent" />}
             title="Appointment History"
             description="Patients can view their complete appointment history and doctor's notes."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Patient viewing medical history on a device"
-            aiHint="medical history"
           />
            <FeatureCard
             icon={<MessageSquareHeart className="h-10 w-10 text-accent" />}
             title="Timely Reminders"
             description="Automated SMS/Email reminders for appointments and status updates."
-            imageSrc="https://placehold.co/600x400.png"
-            imageAlt="Smartphone showing appointment reminder notification"
-            aiHint="appointment reminder"
           />
         </div>
       </section>
@@ -95,13 +79,9 @@ interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-  imageSrc: string;
-  imageAlt: string;
-  aiHint?: string;
-  usePlainImg?: boolean; // New prop
 }
 
-function FeatureCard({ icon, title, description, imageSrc, imageAlt, aiHint, usePlainImg }: FeatureCardProps) {
+function FeatureCard({ icon, title, description }: FeatureCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="items-center text-center">
@@ -110,27 +90,7 @@ function FeatureCard({ icon, title, description, imageSrc, imageAlt, aiHint, use
         </div>
         <CardTitle className="font-headline text-xl">{title}</CardTitle>
       </CardHeader>
-      {usePlainImg ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={imageSrc}
-          alt={imageAlt}
-          className="w-full h-48 object-cover"
-          width="600" // Provide width/height for potential CLS benefits, styled by className
-          height="400"
-        />
-      ) : (
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          width={600}
-          height={400}
-          className="w-full h-48 object-cover"
-          priority={imageSrc.startsWith('/images/features/')}
-          {...(aiHint && { 'data-ai-hint': aiHint })}
-        />
-      )}
-      <CardContent className="pt-4">
+      <CardContent className="pt-4 pb-6"> {/* Adjusted padding for content */}
         <CardDescription className="text-center">{description}</CardDescription>
       </CardContent>
     </Card>
