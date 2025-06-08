@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,49 +32,49 @@ export default function HomePage() {
             icon={<CalendarPlus className="h-10 w-10 text-accent" />}
             title="Easy Appointment Booking"
             description="Intuitive calendar-based scheduling makes booking OPD appointments a breeze for patients."
-            imageSrc="https://placehold.co/600x400.png?text=Easy+Booking"
-            imageAlt="Calendar booking interface"
-            aiHint="calendar schedule"
+            imageSrc="https://placehold.co/600x400.png"
+            imageAlt="Person easily booking an appointment on a phone or computer with a calendar interface"
+            aiHint="appointment booking"
           />
           <FeatureCard
             icon={<ShieldCheck className="h-10 w-10 text-accent" />}
             title="Role-Based Access"
             description="Secure access for Admins, Doctors, and Patients with Firebase Authentication."
-            imageSrc="https://placehold.co/600x400.png?text=Secure+Access"
-            imageAlt="Security shield representing role-based access"
-            aiHint="security access"
+            imageSrc="https://placehold.co/600x400.png"
+            imageAlt="Abstract image representing digital security and user roles, perhaps with lock icons and user profiles"
+            aiHint="digital security"
           />
           <FeatureCard
             icon={<Stethoscope className="h-10 w-10 text-accent" />}
             title="Doctor Dashboards"
             description="Doctors can easily view schedules, manage appointments, and update statuses."
-            imageSrc="https://placehold.co/600x400.png?text=Doctor+Dashboard"
-            imageAlt="Doctor reviewing dashboard on a tablet"
-            aiHint="doctor computer"
+            imageSrc="https://placehold.co/600x400.png"
+            imageAlt="Doctor using a tablet or computer to view a clean and organized dashboard interface"
+            aiHint="doctor dashboard"
           />
           <FeatureCard
             icon={<BrainCircuit className="h-10 w-10 text-accent" />}
             title="Smart Slot Allocation"
             description="AI-powered suggestions for optimal appointment slots to reduce wait times."
-            imageSrc="https://placehold.co/600x400.png?text=AI+Scheduling"
-            imageAlt="Abstract representation of AI and scheduling"
-            aiHint="artificial intelligence"
+            imageSrc="https://placehold.co/600x400.png"
+            imageAlt="Abstract representation of AI or a brain with gears or a calendar, symbolizing intelligent scheduling"
+            aiHint="AI scheduling"
           />
            <FeatureCard
             icon={<History className="h-10 w-10 text-accent" />}
             title="Appointment History"
             description="Patients can view their complete appointment history and doctor's notes."
-            imageSrc="https://placehold.co/600x400.png?text=Medical+History"
-            imageAlt="Illustration of medical records or history"
-            aiHint="medical records"
+            imageSrc="https://placehold.co/600x400.png"
+            imageAlt="Patient viewing a list of past medical appointments or records on a device"
+            aiHint="medical history"
           />
            <FeatureCard
             icon={<MessageSquareHeart className="h-10 w-10 text-accent" />}
             title="Timely Reminders"
             description="Automated SMS/Email reminders for appointments and status updates."
-            imageSrc="https://placehold.co/600x400.png?text=Notifications"
-            imageAlt="Notification bell icon for reminders"
-            aiHint="notification reminder"
+            imageSrc="https://placehold.co/600x400.png"
+            imageAlt="Smartphone displaying a notification or reminder message for an appointment"
+            aiHint="appointment reminder"
           />
         </div>
       </section>
