@@ -1,8 +1,8 @@
 
 import Link from 'next/link';
-import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance, UserCircle, Pill } from 'lucide-react';
+import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance, UserCircle, Pill, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuGroup } from '@/components/ui/dropdown-menu';
 
 export function Header() {
   // Simulate user role - in a real app, this would come from auth context
@@ -38,19 +38,38 @@ export function Header() {
           
           {userRole === 'patient' && (
             <>
-              <Button variant="ghost" asChild className="hidden md:inline-flex">
+              <Button variant="ghost" asChild className="hidden lg:inline-flex">
                 <Link href="/patient/book-appointment" className="font-medium flex items-center"><CalendarDays className="mr-1 h-4 w-4"/> Book</Link>
               </Button>
-              <Button variant="ghost" asChild className="hidden md:inline-flex">
+              {/* Patient More Services Dropdown for medium screens */}
+              <div className="hidden md:inline-flex lg:hidden">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="font-medium flex items-center">
+                      More <MoreHorizontal className="ml-1 h-4 w-4"/>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Patient Services</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild><Link href="/patient/appointment-history" className="flex items-center"><History className="mr-2 h-4 w-4"/>Appointment History</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/find-hospital" className="flex items-center"><MapPin className="mr-2 h-4 w-4"/>Find Hospital</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/find-pharmacy" className="flex items-center"><Pill className="mr-2 h-4 w-4"/>Find Pharmacy</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/bed-availability" className="flex items-center"><BedDouble className="mr-2 h-4 w-4"/>Bed Availability</Link></DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              {/* Patient Links for large screens (already partially covered by the general logic) */}
+              <Button variant="ghost" asChild className="hidden lg:inline-flex">
                 <Link href="/patient/appointment-history" className="font-medium flex items-center"><History className="mr-1 h-4 w-4"/> History</Link>
               </Button>
-               <Button variant="ghost" asChild className="hidden md:inline-flex">
+               <Button variant="ghost" asChild className="hidden lg:inline-flex">
                 <Link href="/patient/find-hospital" className="font-medium flex items-center"><MapPin className="mr-1 h-4 w-4"/> Find Hospital</Link>
               </Button>
-              <Button variant="ghost" asChild className="hidden md:inline-flex">
+              <Button variant="ghost" asChild className="hidden lg:inline-flex">
                 <Link href="/patient/find-pharmacy" className="font-medium flex items-center"><Pill className="mr-1 h-4 w-4"/> Find Pharmacy</Link>
               </Button>
-              <Button variant="ghost" asChild className="hidden md:inline-flex">
+              <Button variant="ghost" asChild className="hidden lg:inline-flex">
                 <Link href="/patient/bed-availability" className="font-medium flex items-center"><BedDouble className="mr-1 h-4 w-4"/> Bed Availability</Link>
               </Button>
             </>
@@ -62,68 +81,75 @@ export function Header() {
               </Button>
           )}
           
+          {/* Main mobile "Menu" Dropdown */}
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="font-medium">Menu</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Navigation</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild><Link href="/" >Home</Link></DropdownMenuItem>
+                {userRole && <DropdownMenuItem asChild><Link href={getDashboardLink()} >Dashboard</Link></DropdownMenuItem>}
+                
+                {userRole === 'patient' && (
+                  <DropdownMenuGroup>
+                    <DropdownMenuSeparator/>
+                    <DropdownMenuLabel>Patient Services</DropdownMenuLabel>
+                    <DropdownMenuItem asChild><Link href="/patient/book-appointment">Book Appointment</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/appointment-history">Appointment History</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/find-hospital">Find Nearby Hospital</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/find-pharmacy">Find Nearby Pharmacy</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/bed-availability">Bed Availability</Link></DropdownMenuItem>
+                  </DropdownMenuGroup>
+                )}
+                 {userRole === 'doctor' && (
+                  <DropdownMenuGroup>
+                     <DropdownMenuSeparator/>
+                    <DropdownMenuLabel>Doctor Tools</DropdownMenuLabel>
+                     <DropdownMenuItem asChild><Link href="/doctor/dashboard">My Schedule</Link></DropdownMenuItem>
+                  </DropdownMenuGroup>
+                )}
+                {userRole === 'admin' && (
+                   <DropdownMenuGroup>
+                    <DropdownMenuSeparator/>
+                    <DropdownMenuLabel>Admin Tools</DropdownMenuLabel>
+                    <DropdownMenuItem asChild><Link href="/admin/manage-doctors">Manage Doctors</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/admin/manage-departments">Manage Departments</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/admin/bed-availability">Bed Availability</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/admin/admissions">Admissions</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/admin/opd-queue">OPD Queue</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/admin/ambulance-services">Ambulance Services</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/admin/smart-slot-allocation">Smart Slots</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/admin/settings">System Settings</Link></DropdownMenuItem>
+                  </DropdownMenuGroup>
+                )}
 
-          {/* Role-based dropdown for smaller screens or more options */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="font-medium md:hidden">Menu</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Navigation</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild><Link href="/" >Home</Link></DropdownMenuItem>
-              {userRole && <DropdownMenuItem asChild><Link href={getDashboardLink()} >Dashboard</Link></DropdownMenuItem>}
-              
-              {userRole === 'patient' && (
-                <>
-                  <DropdownMenuItem asChild><Link href="/patient/book-appointment">Book Appointment</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/patient/appointment-history">Appointment History</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/patient/find-hospital">Find Nearby Hospital</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/patient/find-pharmacy">Find Nearby Pharmacy</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/patient/bed-availability">Bed Availability</Link></DropdownMenuItem>
-                </>
-              )}
-               {userRole === 'doctor' && (
-                <>
-                  {/* Add doctor specific mobile links here if any, e.g., view schedule */}
-                   <DropdownMenuItem asChild><Link href="/doctor/dashboard">My Schedule</Link></DropdownMenuItem>
-                </>
-              )}
-              {userRole === 'admin' && (
-                 <>
-                  <DropdownMenuItem asChild><Link href="/admin/manage-doctors">Manage Doctors</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/admin/manage-departments">Manage Departments</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/admin/bed-availability">Bed Availability</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/admin/admissions">Admissions</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/admin/opd-queue">OPD Queue</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/admin/ambulance-services">Ambulance Services</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/admin/smart-slot-allocation">Smart Slots</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/admin/settings">System Settings</Link></DropdownMenuItem>
-                </>
-              )}
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Account</DropdownMenuLabel>
+                {!userRole && (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/login" className="flex items-center gap-2"><LogIn className="h-4 w-4" /> Login</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/signup" className="flex items-center gap-2"><UserPlus className="h-4 w-4" /> Sign Up</Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+                {userRole && (
+                   <DropdownMenuItem asChild>
+                      <Link href={profileLink} className="flex items-center gap-2"><UserCircle className="h-4 w-4" /> Profile</Link>
+                    </DropdownMenuItem>
+                   // The actual "Logout" functionality will be on the profile page.
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
 
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel>Account</DropdownMenuLabel>
-              {!userRole && (
-                <>
-                  <DropdownMenuItem asChild>
-                    <Link href="/login" className="flex items-center gap-2"><LogIn className="h-4 w-4" /> Login</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/signup" className="flex items-center gap-2"><UserPlus className="h-4 w-4" /> Sign Up</Link>
-                  </DropdownMenuItem>
-                </>
-              )}
-              {userRole && (
-                 <DropdownMenuItem asChild>
-                    <Link href={profileLink} className="flex items-center gap-2"><UserCircle className="h-4 w-4" /> Profile</Link>
-                  </DropdownMenuItem>
-                 // The actual "Logout" functionality will be on the profile page.
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
 
-          {/* Auth buttons for larger screens */}
+          {/* Auth buttons & Profile link for larger screens (md and up, but some patient links are now in a dropdown for md) */}
           {!userRole && (
             <>
               <Button variant="ghost" asChild className="hidden md:inline-flex">
@@ -150,3 +176,4 @@ export function Header() {
     </header>
   );
 }
+

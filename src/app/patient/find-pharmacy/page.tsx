@@ -19,51 +19,54 @@ interface Pharmacy {
   zipCode: string;
   phone: string;
   imageUrl?: string;
-  operatingHours: string; // e.g., "09:00-21:00" (9 AM to 9 PM)
+  operatingHours: string; // e.g., "09:00-21:00", "24/7", "09:00-02:00" (overnight)
   services?: string[];
 }
 
 const mockPharmacies: Pharmacy[] = [
-  { id: 'p1', name: 'MediCare Pharmacy', address: '10 Health Road, Anytown', city: 'Anytown', zipCode: '12345', phone: '555-0201', operatingHours: '08:00-20:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Prescription Refills', 'Vaccinations'] },
-  { id: 'p2', name: 'Wellness Drug Store', address: '25 Life Ave, Suburbia', city: 'Suburbia', zipCode: '67890', phone: '555-0202', operatingHours: '09:00-19:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Over-the-counter', 'Consultations'] },
-  { id: 'p3', name: 'City Central Chemists', address: '300 Cure Blvd, Metropolis', city: 'Metropolis', zipCode: '10001', phone: '555-0203', operatingHours: '00:00-23:59', imageUrl: 'https://placehold.co/600x400.png', services: ['24/7 Service', 'Emergency Supply'] },
-  { id: 'p4', name: 'Anytown Community Pharmacy', address: '5 Remedy Lane, Anytown', city: 'Anytown', zipCode: '12346', phone: '555-0204', operatingHours: '09:00-18:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Prescriptions', 'Health Checks'] },
-  { id: 'p5', name: 'Valley Green Pharmacy', address: '7 Pill Street, Green Valley', city: 'Green Valley', zipCode: '54321', phone: '555-0205', operatingHours: '10:00-22:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Online Orders', 'Delivery'] },
+  { id: 'p1', name: 'MediCare Pharmacy', address: '10 Health Road, Anytown', city: 'Anytown', zipCode: '12345', phone: '555-0201', operatingHours: '08:00-20:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Prescription Refills', 'Vaccinations'], dataAiHint: "pharmacy storefront" },
+  { id: 'p2', name: 'Wellness Drug Store', address: '25 Life Ave, Suburbia', city: 'Suburbia', zipCode: '67890', phone: '555-0202', operatingHours: '09:00-19:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Over-the-counter', 'Consultations'], dataAiHint: "pharmacy interior" },
+  { id: 'p3', name: 'City Central Chemists', address: '300 Cure Blvd, Metropolis', city: 'Metropolis', zipCode: '10001', phone: '555-0203', operatingHours: '24/7', imageUrl: 'https://placehold.co/600x400.png', services: ['24/7 Service', 'Emergency Supply'], dataAiHint: "modern pharmacy" },
+  { id: 'p4', name: 'Anytown Community Pharmacy', address: '5 Remedy Lane, Anytown', city: 'Anytown', zipCode: '12346', phone: '555-0204', operatingHours: '09:00-18:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Prescriptions', 'Health Checks'], dataAiHint: "local pharmacy" },
+  { id: 'p5', name: 'Valley Green Pharmacy', address: '7 Pill Street, Green Valley', city: 'Green Valley', zipCode: '54321', phone: '555-0205', operatingHours: '10:00-00:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Online Orders', 'Delivery'], dataAiHint: "pharmacy building" },
+  { id: 'p6', name: 'Night Owl Pharmacy', address: '12 Midnight Drive, Metropolis', city: 'Metropolis', zipCode: '10002', phone: '555-0206', operatingHours: '18:00-02:00', imageUrl: 'https://placehold.co/600x400.png', services: ['Late Night', 'Prescriptions'], dataAiHint: "pharmacy night" },
 ];
 
-function isPharmacyOpen(operatingHours: string): boolean {
-  const now = new Date();
-  const currentTime = now.getHours() * 60 + now.getMinutes(); // Current time in minutes from midnight
+function parseTime(timeStr: string): { hours: number, minutes: number } | null {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+    return null;
+  }
+  return { hours, minutes };
+}
 
-  const [openStr, closeStr] = operatingHours.split('-');
-  if (!openStr || !closeStr) return false;
+function isPharmacyOpen(operatingHours: string, now: Date): boolean {
+  if (operatingHours.toLowerCase() === '24/7' || operatingHours === "00:00-23:59") {
+    return true;
+  }
 
-  const [openHour, openMinute] = openStr.split(':').map(Number);
-  const [closeHour, closeMinute] = closeStr.split(':').map(Number);
+  const parts = operatingHours.split('-');
+  if (parts.length !== 2) return false; // Invalid format
 
-  const openTime = openHour * 60 + openMinute;
-  let closeTime = closeHour * 60 + closeMinute;
+  const openTime = parseTime(parts[0]);
+  const closeTime = parseTime(parts[1]);
 
-  // Handle 24/7 case or closing past midnight
-  if (closeTime <= openTime) { // Assumes closing past midnight or 24/7 if close is 23:59 or similar
-    if (closeHour === 23 && closeMinute === 59) return true; // Effectively 24/7
-    // For stores closing past midnight, e.g. 09:00-02:00
-    // If current time is after open OR before close (on the next day concept)
-    // This simple logic doesn't fully handle overnight, for 09:00-02:00, it would be:
-    // (currentTime >= openTime) || (currentTime < closeTime)
-    // But if closeTime is 02:00 (120 min) and openTime is 09:00 (540 min), it's more complex.
-    // For simplicity here, if closeTime is less than openTime, assume it wraps around.
-    // A more robust solution would involve date objects.
-    // For now, let's assume 23:59 means always open, or it means it closes *before* midnight
-    // if closeHour < openHour. For this example, 00:00-23:59 is "always open".
-     if (openTime === 0 && closeTime === (23*60 + 59)) return true; // 24/7
-     // if it crosses midnight e.g. 09:00 - 02:00 (next day)
-     if (closeTime < openTime) {
-        return currentTime >= openTime || currentTime < closeTime;
-     }
+  if (!openTime || !closeTime) return false;
+
+  const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes();
+  const openTimeInMinutes = openTime.hours * 60 + openTime.minutes;
+  let closeTimeInMinutes = closeTime.hours * 60 + closeTime.minutes;
+
+  // Handle pharmacies that close after midnight (e.g., 09:00-02:00)
+  // or are open exactly until midnight (e.g. 10:00-00:00, where 00:00 is effectively 24:00 for comparison)
+  if (closeTime.hours === 0 && closeTime.minutes === 0) {
+      closeTimeInMinutes = 24 * 60;
+  } else if (closeTimeInMinutes < openTimeInMinutes) {
+    // Closes on the next day
+    return currentTimeInMinutes >= openTimeInMinutes || currentTimeInMinutes < closeTimeInMinutes;
   }
   
-  return currentTime >= openTime && currentTime < closeTime;
+  return currentTimeInMinutes >= openTimeInMinutes && currentTimeInMinutes < closeTimeInMinutes;
 }
 
 
@@ -71,32 +74,21 @@ export default function FindPharmacyPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredPharmacies, setFilteredPharmacies] = useState<Pharmacy[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  const [currentTimes, setCurrentTimes] = useState<Record<string, boolean>>({});
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
-    // Initial calculation for all mock pharmacies
-    const initialStatus: Record<string, boolean> = {};
-    mockPharmacies.forEach(p => {
-      initialStatus[p.id] = isPharmacyOpen(p.operatingHours);
-    });
-    setCurrentTimes(initialStatus);
+    const timer = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 60000); // Update every minute
 
-    // Update every minute
-    const interval = setInterval(() => {
-      const updatedStatus: Record<string, boolean> = {};
-      (hasSearched ? filteredPharmacies : mockPharmacies).forEach(p => {
-        updatedStatus[p.id] = isPharmacyOpen(p.operatingHours);
-      });
-      setCurrentTimes(prev => ({...prev, ...updatedStatus}));
-    }, 60000);
-    return () => clearInterval(interval);
-  }, [hasSearched, filteredPharmacies]);
+    return () => clearInterval(timer); // Cleanup interval on component unmount
+  }, []);
 
 
   const handleSearch = () => {
     setHasSearched(true);
     if (!searchQuery.trim()) {
-      setFilteredPharmacies([]);
+      setFilteredPharmacies([]); // Show no results if search query is empty after trying to search
       return;
     }
     const lowerCaseQuery = searchQuery.toLowerCase();
@@ -107,12 +99,6 @@ export default function FindPharmacyPage() {
         pharmacy.name.toLowerCase().includes(lowerCaseQuery)
     );
     setFilteredPharmacies(results);
-     // Update open/close status for newly filtered pharmacies
-    const updatedStatus: Record<string, boolean> = {};
-    results.forEach(p => {
-        updatedStatus[p.id] = isPharmacyOpen(p.operatingHours);
-    });
-    setCurrentTimes(prev => ({...prev, ...updatedStatus}));
   };
 
   const pharmaciesToDisplay = hasSearched ? filteredPharmacies : [];
@@ -156,12 +142,12 @@ export default function FindPharmacyPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {pharmaciesToDisplay.map((pharmacy) => {
-              const isOpen = currentTimes[pharmacy.id] ?? false;
+              const isOpen = isPharmacyOpen(pharmacy.operatingHours, currentDate);
               return (
               <Card key={pharmacy.id} className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 {pharmacy.imageUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={pharmacy.imageUrl} alt={pharmacy.name} className="w-full h-40 object-cover" data-ai-hint="pharmacy storefront" />
+                  <img src={pharmacy.imageUrl} alt={pharmacy.name} className="w-full h-40 object-cover" data-ai-hint={pharmacy.dataAiHint || "pharmacy building"} />
                 )}
                 <CardHeader>
                   <CardTitle className="font-headline text-xl flex items-center gap-2">
@@ -210,4 +196,3 @@ export default function FindPharmacyPage() {
     </div>
   );
 }
-
