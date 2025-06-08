@@ -32,28 +32,28 @@ export default function HomePage() {
             icon={<CalendarPlus className="h-10 w-10 text-accent" />}
             title="Easy Appointment Booking"
             description="Intuitive calendar-based scheduling makes booking OPD appointments a breeze for patients."
-            imageSrc="/easy-appointment-booking.png"
+            imageSrc="/images/features/easy-appointment-booking.png"
             imageAlt="A person using a mobile phone to book an appointment on a calendar interface, with a checkmark indicating success."
           />
           <FeatureCard
             icon={<ShieldCheck className="h-10 w-10 text-accent" />}
             title="Role-Based Access"
             description="Secure access for Admins, Doctors, and Patients with Firebase Authentication."
-            imageSrc="/role-based-access.png"
+            imageSrc="/images/features/role-based-access.png"
             imageAlt="Three figures representing admin, doctor, and patient roles, each with a key, interacting with a secure system shield."
           />
           <FeatureCard
             icon={<Stethoscope className="h-10 w-10 text-accent" />}
             title="Doctor Dashboards"
             description="Doctors can easily view schedules, manage appointments, and update statuses."
-            imageSrc="/doctor-dashboards.png"
+            imageSrc="/images/features/doctor-dashboards.png"
             imageAlt="A doctor reviewing a patient's chart on a tablet, with medical icons in the background."
           />
           <FeatureCard
             icon={<BrainCircuit className="h-10 w-10 text-accent" />}
             title="Smart Slot Allocation"
             description="AI-powered suggestions for optimal appointment slots to reduce wait times."
-            imageSrc="/smart-slot-allocation.png"
+            imageSrc="/images/features/smart-slot-allocation.png"
             imageAlt="A human head silhouette with a gear inside, next to the text 'Smart Slot Allocation', representing AI-powered scheduling."
           />
            <FeatureCard
