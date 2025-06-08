@@ -54,7 +54,7 @@ export default function HomePage() {
             title="Smart Slot Allocation"
             description="AI-powered suggestions for optimal appointment slots to reduce wait times."
             imageSrc="/images/features/smart-slot-allocation.png"
-            imageAlt="A human head silhouette with a gear inside, next to the text 'Smart Slot Allocation', representing AI-powered scheduling."
+            imageAlt="Stylized brain with circuitry connected to a calendar, symbolizing AI-optimized scheduling for appointments."
           />
            <FeatureCard
             icon={<History className="h-10 w-10 text-accent" />}
@@ -108,7 +108,15 @@ function FeatureCard({ icon, title, description, imageSrc, imageAlt, aiHint }: F
         </div>
         <CardTitle className="font-headline text-xl">{title}</CardTitle>
       </CardHeader>
-      <Image src={imageSrc} alt={imageAlt} width={600} height={400} className="w-full h-48 object-cover" {...(aiHint && { 'data-ai-hint': aiHint })} />
+      <Image 
+        src={imageSrc} 
+        alt={imageAlt} 
+        width={600} 
+        height={400} 
+        className="w-full h-48 object-cover" 
+        priority={imageSrc.startsWith('/images/features/')} // Prioritize loading local images
+        {...(aiHint && { 'data-ai-hint': aiHint })} 
+      />
       <CardContent className="pt-4">
         <CardDescription className="text-center">{description}</CardDescription>
       </CardContent>
