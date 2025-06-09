@@ -2,13 +2,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Clock, User, FilePlus, Send, Eye, Loader2 } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, User, FilePlus, Send, Eye, Loader2, Video } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
@@ -27,6 +28,7 @@ interface Appointment {
   date: Date; // Or Timestamp from Firestore, then convert
   time: string;
   status: 'Scheduled' | 'Completed' | 'Canceled';
+  appointmentMode?: 'In-Person' | 'Teleconsultation';
   reason?: string;
   notes?: string;
   // Add other fields as necessary, e.g., patientId, doctorId
@@ -35,12 +37,12 @@ interface Appointment {
 
 // Mock data for doctor's appointments
 const mockDoctorAppointments: Appointment[] = [
-  { id: 'appt_doc_1', patientName: 'Alice Wonderland', date: new Date(), time: '09:00 AM', status: 'Scheduled', reason: 'Annual Checkup' },
-  { id: 'appt_doc_2', patientName: 'Bob The Builder', date: new Date(), time: '09:30 AM', status: 'Scheduled', reason: 'Follow-up Consultation' },
-  { id: 'appt_doc_3', patientName: 'Charlie Brown', date: new Date(new Date().setDate(new Date().getDate() -1)), time: '10:00 AM', status: 'Completed', notes: 'Prescribed antibiotics. Follow up if no improvement.' },
-  { id: 'appt_doc_4', patientName: 'Diana Prince', date: new Date(), time: '10:30 AM', status: 'Scheduled', reason: 'Fever and Cough' },
-  { id: 'appt_doc_5', patientName: 'Edward Scissorhands', date: new Date(new Date().setDate(new Date().getDate() -2)), time: '11:00 AM', status: 'Canceled', notes: 'Patient rescheduled.' },
-  { id: 'appt_doc_6', patientName: 'Fiona Gallagher', date: new Date(new Date().setDate(new Date().getDate() + 1)), time: '02:00 PM', status: 'Scheduled', reason: 'Vaccination' },
+  { id: 'appt_doc_1', patientName: 'Alice Wonderland', date: new Date(), time: '09:00 AM', status: 'Scheduled', appointmentMode: 'In-Person', reason: 'Annual Checkup' },
+  { id: 'appt_doc_2', patientName: 'Bob The Builder', date: new Date(), time: '09:30 AM', status: 'Scheduled', appointmentMode: 'Teleconsultation', reason: 'Follow-up Consultation' },
+  { id: 'appt_doc_3', patientName: 'Charlie Brown', date: new Date(new Date().setDate(new Date().getDate() -1)), time: '10:00 AM', status: 'Completed', appointmentMode: 'In-Person', notes: 'Prescribed antibiotics. Follow up if no improvement.' },
+  { id: 'appt_doc_4', patientName: 'Diana Prince', date: new Date(), time: '10:30 AM', status: 'Scheduled', appointmentMode: 'In-Person', reason: 'Fever and Cough' },
+  { id: 'appt_doc_5', patientName: 'Edward Scissorhands', date: new Date(new Date().setDate(new Date().getDate() -2)), time: '11:00 AM', status: 'Canceled', appointmentMode: 'Teleconsultation', notes: 'Patient rescheduled.' },
+  { id: 'appt_doc_6', patientName: 'Fiona Gallagher', date: new Date(new Date().setDate(new Date().getDate() + 1)), time: '02:00 PM', status: 'Scheduled', appointmentMode: 'Teleconsultation', reason: 'Vaccination' },
 ];
 
 export function DoctorSchedule() {
@@ -80,6 +82,7 @@ export function DoctorSchedule() {
     //         date: data.appointmentDate.toDate ? data.appointmentDate.toDate() : new Date(data.appointmentDate), 
     //         time: data.appointmentTime,
     //         status: data.status as Appointment['status'],
+    //         appointmentMode: data.appointmentMode as Appointment['appointmentMode'],
     //         reason: data.reasonForVisit,
     //         notes: data.notes,
     //       });
@@ -214,6 +217,7 @@ export function DoctorSchedule() {
                   <TableHead>Patient</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Time</TableHead>
+                  <TableHead>Mode</TableHead>
                   <TableHead>Reason/Notes</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
@@ -227,16 +231,34 @@ export function DoctorSchedule() {
                     <TableCell className="font-medium flex items-center gap-2"> <User className="h-4 w-4 text-muted-foreground"/> {apt.patientName}</TableCell>
                     <TableCell>{format(new Date(apt.date), 'PPP')}</TableCell>
                     <TableCell>{apt.time}</TableCell>
+                    <TableCell>
+                      {apt.appointmentMode === 'Teleconsultation' ? (
+                        <Badge variant="secondary" className="flex items-center gap-1 w-fit">
+                          <Video className="h-3 w-3" /> Teleconsultation
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="flex items-center gap-1 w-fit">
+                           <User className="h-3 w-3" /> In-Person
+                        </Badge>
+                      )}
+                    </TableCell>
                     <TableCell className="max-w-xs truncate">{apt.status === 'Completed' || apt.status === 'Canceled' ? apt.notes : apt.reason}</TableCell>
                     <TableCell>
                       <Badge variant={badgeVariant} className="flex items-center gap-1 w-fit">
                         {icon} {apt.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="space-x-1">
+                    <TableCell className="space-x-1 space-y-1 md:space-y-0">
                       <Button variant="outline" size="sm" onClick={() => handleOpenNotesModal(apt)}><Eye className="h-3 w-3 mr-1"/>View/Edit Notes</Button>
                       {apt.status === 'Scheduled' && (
                         <>
+                          {apt.appointmentMode === 'Teleconsultation' && (
+                            <Button variant="outline" size="sm" className="text-primary border-primary hover:bg-primary/10" asChild>
+                              <Link href={`/teleconsultation-session/${apt.id}`}>
+                                <Video className="h-3 w-3 mr-1"/>Start Call
+                              </Link>
+                            </Button>
+                          )}
                           <Button variant="outline" size="sm" className="text-green-600 border-green-600 hover:bg-green-50" onClick={() => handleUpdateAppointmentStatus(apt.id, 'Completed')}><CheckCircle className="h-3 w-3 mr-1"/>Complete</Button>
                           <Button variant="outline" size="sm" className="text-red-600 border-red-600 hover:bg-red-50" onClick={() => handleUpdateAppointmentStatus(apt.id, 'Canceled')}><XCircle className="h-3 w-3 mr-1"/>Cancel</Button>
                         </>
@@ -303,7 +325,7 @@ export function DoctorSchedule() {
             <DialogTitle className="font-headline">Consultation Notes for {selectedAppointment?.patientName}</DialogTitle>
             <DialogDescription>
               View or update consultation notes for this appointment.
-            </DialogDescription>
+            </Description>
           </DialogHeader>
           <div className="grid gap-4 py-4">
              <div className="grid w-full gap-1.5">
@@ -326,3 +348,5 @@ export function DoctorSchedule() {
     </Card>
   );
 }
+
+    

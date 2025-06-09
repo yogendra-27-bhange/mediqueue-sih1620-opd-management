@@ -28,8 +28,9 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { CalendarIcon, Loader2, Send } from 'lucide-react';
+import { CalendarIcon, Loader2, Send, Video, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 // TODO: When integrating Firebase:
 // import { auth, db } from '@/lib/firebase/config';
@@ -77,6 +78,7 @@ const formSchema = z.object({
   doctor: z.string({ required_error: 'Please select a doctor.' }),
   appointmentDate: z.date({ required_error: 'Please select a date for your appointment.' }),
   appointmentTime: z.string({ required_error: 'Please select a time slot.' }),
+  appointmentMode: z.enum(['in-person', 'teleconsultation'], { required_error: 'Please select an appointment mode.'}),
   reasonForVisit: z.string().min(10, { message: 'Please provide a brief reason for your visit (at least 10 characters).' }).max(500, { message: 'Reason cannot exceed 500 characters.'}),
   patientPhoneNumber: z.string().optional(), // Optional for now, make required if Twilio is fully integrated
 });
@@ -92,7 +94,8 @@ export function AppointmentBookingForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       reasonForVisit: '',
-      patientPhoneNumber: '', // Initialize if needed
+      patientPhoneNumber: '', 
+      appointmentMode: 'in-person',
     }
   });
   
@@ -130,6 +133,7 @@ export function AppointmentBookingForm() {
       //   doctorName: values.doctor,
       //   appointmentDate: values.appointmentDate,
       //   appointmentTime: values.appointmentTime,
+      //   appointmentMode: values.appointmentMode,
       //   reasonForVisit: values.reasonForVisit,
       //   status: "Scheduled", // Initial status
       //   createdAt: serverTimestamp(),
@@ -139,7 +143,7 @@ export function AppointmentBookingForm() {
 
       toast({
         title: "Appointment Booked! (Mock)",
-        description: `Your appointment with ${values.doctor} for ${mockDepartments.find(d=>d.id === values.department)?.name} on ${format(values.appointmentDate, "PPP")} at ${values.appointmentTime} has been successfully scheduled.`,
+        description: `Your ${values.appointmentMode === 'teleconsultation' ? 'teleconsultation' : 'in-person appointment'} with ${values.doctor} for ${mockDepartments.find(d=>d.id === values.department)?.name} on ${format(values.appointmentDate, "PPP")} at ${values.appointmentTime} has been successfully scheduled.`,
       });
 
       // TODO: Trigger SMS notification via Twilio
@@ -248,6 +252,41 @@ export function AppointmentBookingForm() {
             </FormItem>
           )}
         />
+        
+        <FormField
+          control={form.control}
+          name="appointmentMode"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>Appointment Mode</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4"
+                >
+                  <FormItem className="flex items-center space-x-2 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="in-person" id="in-person" />
+                    </FormControl>
+                    <Label htmlFor="in-person" className="font-normal flex items-center gap-2">
+                      <Users className="h-4 w-4 text-muted-foreground" /> In-Person
+                    </Label>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-2 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="teleconsultation" id="teleconsultation" />
+                    </FormControl>
+                    <Label htmlFor="teleconsultation" className="font-normal flex items-center gap-2">
+                      <Video className="h-4 w-4 text-muted-foreground" /> Teleconsultation
+                    </Label>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -349,3 +388,5 @@ export function AppointmentBookingForm() {
     </Form>
   );
 }
+
+    

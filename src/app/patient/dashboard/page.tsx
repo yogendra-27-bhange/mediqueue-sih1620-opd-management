@@ -2,14 +2,14 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarPlus, History, UserCircle, FileText, MessageCircle, MapPin, BedDouble, Pill, Stethoscope, AlertTriangle } from 'lucide-react';
+import { CalendarPlus, History, UserCircle, FileText, MessageCircle, MapPin, BedDouble, Pill, Stethoscope, AlertTriangle, Video } from 'lucide-react';
 import Image from 'next/image';
 import { EmergencySOSButton } from '@/components/patient/emergency-sos-button';
 
 // Mock data for upcoming appointments
 const mockUpcomingAppointments = [
-  { id: '1', doctor: 'Dr. Emily Carter', department: 'Cardiology', date: '2024-07-28', time: '10:00 AM', status: 'Scheduled' },
-  { id: '2', doctor: 'Dr. Johnathan Lee', department: 'Pediatrics', date: '2024-08-02', time: '02:30 PM', status: 'Scheduled' },
+  { id: '1', doctor: 'Dr. Emily Carter', department: 'Cardiology', date: '2024-07-28', time: '10:00 AM', status: 'Scheduled', appointmentMode: 'In-Person' as 'In-Person' | 'Teleconsultation' },
+  { id: '2', doctor: 'Dr. Johnathan Lee', department: 'Pediatrics', date: '2024-08-02', time: '02:30 PM', status: 'Scheduled', appointmentMode: 'Teleconsultation' as 'In-Person' | 'Teleconsultation' },
 ];
 
 export default function PatientDashboardPage() {
@@ -78,15 +78,27 @@ export default function PatientDashboardPage() {
             <ul className="space-y-4">
               {mockUpcomingAppointments.map(apt => (
                 <li key={apt.id} className="p-4 border rounded-lg hover:shadow-md transition-shadow bg-background">
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-start">
                     <div>
                       <p className="font-semibold text-md">{apt.department} with {apt.doctor}</p>
                       <p className="text-sm text-muted-foreground">{apt.date} at {apt.time}</p>
+                       {apt.appointmentMode === 'Teleconsultation' && (
+                        <Badge variant="secondary" className="mt-1 flex items-center gap-1 w-fit">
+                          <Video className="h-3 w-3" /> Teleconsultation
+                        </Badge>
+                      )}
                     </div>
                     <div className="text-right">
                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${apt.status === 'Scheduled' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
                         {apt.status}
                        </span>
+                       {apt.status === 'Scheduled' && apt.appointmentMode === 'Teleconsultation' && (
+                         <Button variant="outline" size="sm" className="mt-2 w-full text-primary border-primary hover:bg-primary/10" asChild>
+                           <Link href={`/teleconsultation-session/${apt.id}`}>
+                            <Video className="mr-1 h-4 w-4" /> Join Call
+                           </Link>
+                         </Button>
+                       )}
                        <Button variant="link" size="sm" className="mt-1 text-primary">View Details</Button>
                     </div>
                   </div>
@@ -148,3 +160,5 @@ function ActionCard({ title, icon, link }: ActionCardProps) {
     </Link>
   );
 }
+
+    
