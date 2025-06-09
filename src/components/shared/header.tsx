@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance, UserCircle, Pill, MoreHorizontal } from 'lucide-react';
+import { Hospital, LogIn, UserPlus, LayoutDashboard, CalendarDays, History, Users, BriefcaseMedical, BedDouble, ListChecks, Lightbulb, MapPin, Settings as SettingsIcon, Hospital as HospitalIconMenu, Ambulance, UserCircle, Pill, MoreHorizontal, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuGroup } from '@/components/ui/dropdown-menu';
 
@@ -53,15 +53,19 @@ export function Header() {
                     <DropdownMenuLabel>Patient Services</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild><Link href="/patient/appointment-history" className="flex items-center"><History className="mr-2 h-4 w-4"/>Appointment History</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/symptom-checker" className="flex items-center"><Stethoscope className="mr-2 h-4 w-4"/>Symptom Checker</Link></DropdownMenuItem>
                     <DropdownMenuItem asChild><Link href="/patient/find-hospital" className="flex items-center"><MapPin className="mr-2 h-4 w-4"/>Find Hospital</Link></DropdownMenuItem>
                     <DropdownMenuItem asChild><Link href="/patient/find-pharmacy" className="flex items-center"><Pill className="mr-2 h-4 w-4"/>Find Pharmacy</Link></DropdownMenuItem>
                     <DropdownMenuItem asChild><Link href="/patient/bed-availability" className="flex items-center"><BedDouble className="mr-2 h-4 w-4"/>Bed Availability</Link></DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              {/* Patient Links for large screens (already partially covered by the general logic) */}
+              {/* Patient Links for large screens */}
               <Button variant="ghost" asChild className="hidden lg:inline-flex">
                 <Link href="/patient/appointment-history" className="font-medium flex items-center"><History className="mr-1 h-4 w-4"/> History</Link>
+              </Button>
+               <Button variant="ghost" asChild className="hidden lg:inline-flex">
+                <Link href="/patient/symptom-checker" className="font-medium flex items-center"><Stethoscope className="mr-1 h-4 w-4"/> Symptom Check</Link>
               </Button>
                <Button variant="ghost" asChild className="hidden lg:inline-flex">
                 <Link href="/patient/find-hospital" className="font-medium flex items-center"><MapPin className="mr-1 h-4 w-4"/> Find Hospital</Link>
@@ -99,6 +103,7 @@ export function Header() {
                     <DropdownMenuLabel>Patient Services</DropdownMenuLabel>
                     <DropdownMenuItem asChild><Link href="/patient/book-appointment">Book Appointment</Link></DropdownMenuItem>
                     <DropdownMenuItem asChild><Link href="/patient/appointment-history">Appointment History</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/patient/symptom-checker">AI Symptom Checker</Link></DropdownMenuItem>
                     <DropdownMenuItem asChild><Link href="/patient/find-hospital">Find Nearby Hospital</Link></DropdownMenuItem>
                     <DropdownMenuItem asChild><Link href="/patient/find-pharmacy">Find Nearby Pharmacy</Link></DropdownMenuItem>
                     <DropdownMenuItem asChild><Link href="/patient/bed-availability">Bed Availability</Link></DropdownMenuItem>
@@ -176,4 +181,3 @@ export function Header() {
     </header>
   );
 }
-

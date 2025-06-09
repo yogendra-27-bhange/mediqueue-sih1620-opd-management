@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarPlus, History, UserCircle, FileText, MessageCircle, MapPin, BedDouble, Pill } from 'lucide-react';
+import { CalendarPlus, History, UserCircle, FileText, MessageCircle, MapPin, BedDouble, Pill, Stethoscope } from 'lucide-react';
 import Image from 'next/image';
 
 // Mock data for upcoming appointments
@@ -32,13 +32,14 @@ export default function PatientDashboardPage() {
       {/* Quick Actions */}
       <section>
         <h2 className="text-2xl font-headline font-semibold mb-4 text-primary">Quick Actions</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <ActionCard title="Book New Appointment" icon={<CalendarPlus className="h-6 w-6" />} link="/patient/book-appointment" />
           <ActionCard title="View Appointment History" icon={<History className="h-6 w-6" />} link="/patient/appointment-history" />
+          <ActionCard title="AI Symptom Checker" icon={<Stethoscope className="h-6 w-6" />} link="/patient/symptom-checker" />
           <ActionCard title="Find Nearby Hospital" icon={<MapPin className="h-6 w-6" />} link="/patient/find-hospital" />
           <ActionCard title="Find Nearby Pharmacy" icon={<Pill className="h-6 w-6" />} link="/patient/find-pharmacy" />
           <ActionCard title="View Bed Availability" icon={<BedDouble className="h-6 w-6" />} link="/patient/bed-availability" />
-          <ActionCard title="Manage Profile" icon={<UserCircle className="h-6 w-6" />} link="/patient/profile" />
+          <ActionCard title="Manage Profile" icon={<UserCircle className="h-6 w-6" />} link="/profile" />
         </div>
       </section>
 
