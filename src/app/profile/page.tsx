@@ -32,7 +32,7 @@ export default function ProfilePage() {
               width={120} 
               height={120} 
               className="rounded-full border-4 border-primary"
-              data-ai-hint="person doctor" 
+              data-ai-hint="profile avatar" 
             />
           </div>
           <CardTitle className="text-3xl font-headline text-primary">{mockUserData.name}</CardTitle>
