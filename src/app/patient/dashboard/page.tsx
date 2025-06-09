@@ -2,8 +2,9 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarPlus, History, UserCircle, FileText, MessageCircle, MapPin, BedDouble, Pill, Stethoscope } from 'lucide-react';
+import { CalendarPlus, History, UserCircle, FileText, MessageCircle, MapPin, BedDouble, Pill, Stethoscope, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
+import { EmergencySOSButton } from '@/components/patient/emergency-sos-button';
 
 // Mock data for upcoming appointments
 const mockUpcomingAppointments = [
@@ -27,6 +28,29 @@ export default function PatientDashboardPage() {
         <CardContent>
           <p>Manage your health journey with ease. Book new appointments, view your medical history, and communicate with your doctors all in one place.</p>
         </CardContent>
+      </Card>
+
+      {/* Emergency SOS Section */}
+      <Card className="border-destructive shadow-lg bg-destructive/5">
+        <CardHeader className="text-center">
+          <div className="inline-flex justify-center items-center text-destructive">
+            <AlertTriangle className="h-10 w-10 mb-2" />
+          </div>
+          <CardTitle className="text-2xl font-headline text-destructive">Emergency Assistance</CardTitle>
+          <CardDescription className="text-destructive/90">
+            In a critical medical situation? Press the SOS button below to alert nearby services with your location.
+            Use responsibly.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <EmergencySOSButton />
+        </CardContent>
+         <CardFooter>
+          <p className="text-xs text-destructive/70 text-center w-full">
+            This feature requires location access. Ensure it's enabled in your browser and OS settings.
+            Alerts are logged for review.
+          </p>
+        </CardFooter>
       </Card>
 
       {/* Quick Actions */}
