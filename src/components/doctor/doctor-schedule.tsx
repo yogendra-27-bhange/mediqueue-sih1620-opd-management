@@ -1,21 +1,40 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Clock, User, FilePlus, Send, Eye } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, User, FilePlus, Send, Eye, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
+import { useToast } from '@/hooks/use-toast';
+
+// TODO: When integrating Firebase:
+// import { auth, db } from '@/lib/firebase/config';
+// import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+// import { useAuthState } from 'react-firebase-hooks/auth';
+
+// Define the structure of an appointment
+interface Appointment {
+  id: string;
+  patientName: string;
+  date: Date; // Or Timestamp from Firestore, then convert
+  time: string;
+  status: 'Scheduled' | 'Completed' | 'Canceled';
+  reason?: string;
+  notes?: string;
+  // Add other fields as necessary, e.g., patientId, doctorId
+}
 
 
 // Mock data for doctor's appointments
-const mockDoctorAppointments = [
+const mockDoctorAppointments: Appointment[] = [
   { id: 'appt_doc_1', patientName: 'Alice Wonderland', date: new Date(), time: '09:00 AM', status: 'Scheduled', reason: 'Annual Checkup' },
   { id: 'appt_doc_2', patientName: 'Bob The Builder', date: new Date(), time: '09:30 AM', status: 'Scheduled', reason: 'Follow-up Consultation' },
   { id: 'appt_doc_3', patientName: 'Charlie Brown', date: new Date(new Date().setDate(new Date().getDate() -1)), time: '10:00 AM', status: 'Completed', notes: 'Prescribed antibiotics. Follow up if no improvement.' },
@@ -26,16 +45,67 @@ const mockDoctorAppointments = [
 
 export function DoctorSchedule() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [selectedAppointment, setSelectedAppointment] = useState<typeof mockDoctorAppointments[0] | null>(null);
+  const [appointments, setAppointments] = useState<Appointment[]>(mockDoctorAppointments); // Initialize with mock, will be replaced by Firestore data
+  const [isLoading, setIsLoading] = useState(true); // For loading state from Firestore
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false);
   const [isNotesModalOpen, setIsNotesModalOpen] = useState(false);
+  const [currentNotes, setCurrentNotes] = useState('');
+  const { toast } = useToast();
+
+  // const [user, loadingAuth, errorAuth] = useAuthState(auth); // For Firebase Auth
+
+  useEffect(() => {
+    // TODO: Implement fetching appointments from Firestore for the logged-in doctor
+    // if (!user && !loadingAuth) {
+    //   // Handle case where user is not logged in or auth state is still loading
+    //   setIsLoading(false);
+    //   // router.push('/login'); // or display a message
+    //   return;
+    // }
+    // if (user) {
+    //   setIsLoading(true);
+    //   const appointmentsCol = collection(db, 'appointments');
+    //   // Assuming doctorId is stored in appointment documents
+    //   const q = query(appointmentsCol, where('doctorId', '==', user.uid));
+      
+    //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    //     const fetchedAppointments: Appointment[] = [];
+    //     querySnapshot.forEach((doc) => {
+    //       const data = doc.data();
+    //       fetchedAppointments.push({
+    //         id: doc.id,
+    //         patientName: data.patientName,
+    //         // Firestore timestamps need to be converted to Date objects
+    //         date: data.appointmentDate.toDate ? data.appointmentDate.toDate() : new Date(data.appointmentDate), 
+    //         time: data.appointmentTime,
+    //         status: data.status as Appointment['status'],
+    //         reason: data.reasonForVisit,
+    //         notes: data.notes,
+    //       });
+    //     });
+    //     setAppointments(fetchedAppointments);
+    //     setIsLoading(false);
+    //   }, (error) => {
+    //     console.error("Error fetching appointments: ", error);
+    //     toast({ title: "Error", description: "Could not fetch appointments.", variant: "destructive" });
+    //     setIsLoading(false);
+    //   });
+
+    //   return () => unsubscribe(); // Cleanup listener on component unmount
+    // }
+    // For now, just simulate loading delay with mock data
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, [/* user, loadingAuth, toast */]);
 
 
-  const filteredAppointments = mockDoctorAppointments.filter(apt => {
+  const filteredAppointments = appointments.filter(apt => {
     if (statusFilter === 'all') return true;
     return apt.status.toLowerCase() === statusFilter;
-  }).sort((a,b) => { // Sort by date and then by time
-    const dateComparison = a.date.getTime() - b.date.getTime();
+  }).sort((a,b) => { 
+    const dateComparison = new Date(a.date).getTime() - new Date(b.date).getTime();
     if (dateComparison !== 0) return dateComparison;
     return a.time.localeCompare(b.time);
   });
@@ -49,15 +119,70 @@ export function DoctorSchedule() {
     }
   };
   
-  const handleOpenPrescriptionModal = (appointment: typeof mockDoctorAppointments[0]) => {
+  const handleOpenPrescriptionModal = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
     setIsPrescriptionModalOpen(true);
   };
   
-  const handleOpenNotesModal = (appointment: typeof mockDoctorAppointments[0]) => {
+  const handleOpenNotesModal = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
+    setCurrentNotes(appointment.notes || appointment.reason || '');
     setIsNotesModalOpen(true);
   };
+
+  const handleSaveNotes = async () => {
+    if (!selectedAppointment) return;
+    // TODO: Implement saving notes to Firestore
+    // try {
+    //   const appointmentRef = doc(db, 'appointments', selectedAppointment.id);
+    //   await updateDoc(appointmentRef, {
+    //     notes: currentNotes,
+    //     // Optionally, update a 'lastModified' timestamp
+    //   });
+    //   toast({ title: "Success", description: "Notes updated successfully." });
+    //   setIsNotesModalOpen(false);
+    //   // The onSnapshot listener should automatically update the local state
+    // } catch (error) {
+    //   console.error("Error updating notes:", error);
+    //   toast({ title: "Error", description: "Failed to update notes.", variant: "destructive" });
+    // }
+    console.log("Saving notes for appointment:", selectedAppointment.id, "Notes:", currentNotes);
+    toast({ title: "Notes Saved (Mock)", description: "Notes would be saved to the database." });
+    // Manually update mock data for demonstration
+    setAppointments(prev => prev.map(apt => apt.id === selectedAppointment.id ? {...apt, notes: currentNotes} : apt));
+    setIsNotesModalOpen(false);
+  };
+
+  const handleUpdateAppointmentStatus = async (appointmentId: string, newStatus: Appointment['status']) => {
+    // TODO: Implement updating appointment status in Firestore
+    // try {
+    //   const appointmentRef = doc(db, 'appointments', appointmentId);
+    //   await updateDoc(appointmentRef, {
+    //     status: newStatus,
+    //     // If completing, perhaps add a completedAt timestamp
+    //     // If canceling, perhaps add a reason for cancellation
+    //   });
+    //   toast({ title: "Status Updated", description: `Appointment marked as ${newStatus}.` });
+    //   // Firestore onSnapshot will update UI
+    // } catch (error) {
+    //   console.error("Error updating status:", error);
+    //   toast({ title: "Error", description: "Failed to update status.", variant: "destructive" });
+    // }
+    console.log("Updating status for:", appointmentId, "to:", newStatus);
+    toast({ title: "Status Updated (Mock)", description: `Appointment status changed to ${newStatus}.` });
+    // Manually update mock data for demonstration
+    setAppointments(prev => prev.map(apt => apt.id === appointmentId ? {...apt, status: newStatus} : apt));
+  };
+
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="ml-2">Loading schedule...</p>
+      </div>
+    );
+  }
 
   return (
     <Card className="shadow-lg">
@@ -100,7 +225,7 @@ export function DoctorSchedule() {
                   return (
                   <TableRow key={apt.id}>
                     <TableCell className="font-medium flex items-center gap-2"> <User className="h-4 w-4 text-muted-foreground"/> {apt.patientName}</TableCell>
-                    <TableCell>{format(apt.date, 'PPP')}</TableCell>
+                    <TableCell>{format(new Date(apt.date), 'PPP')}</TableCell>
                     <TableCell>{apt.time}</TableCell>
                     <TableCell className="max-w-xs truncate">{apt.status === 'Completed' || apt.status === 'Canceled' ? apt.notes : apt.reason}</TableCell>
                     <TableCell>
@@ -112,8 +237,8 @@ export function DoctorSchedule() {
                       <Button variant="outline" size="sm" onClick={() => handleOpenNotesModal(apt)}><Eye className="h-3 w-3 mr-1"/>View/Edit Notes</Button>
                       {apt.status === 'Scheduled' && (
                         <>
-                          <Button variant="outline" size="sm" className="text-green-600 border-green-600 hover:bg-green-50" onClick={() => console.log("Mark Complete", apt.id)}><CheckCircle className="h-3 w-3 mr-1"/>Complete</Button>
-                          <Button variant="outline" size="sm" className="text-red-600 border-red-600 hover:bg-red-50" onClick={() => console.log("Cancel Appt", apt.id)}><XCircle className="h-3 w-3 mr-1"/>Cancel</Button>
+                          <Button variant="outline" size="sm" className="text-green-600 border-green-600 hover:bg-green-50" onClick={() => handleUpdateAppointmentStatus(apt.id, 'Completed')}><CheckCircle className="h-3 w-3 mr-1"/>Complete</Button>
+                          <Button variant="outline" size="sm" className="text-red-600 border-red-600 hover:bg-red-50" onClick={() => handleUpdateAppointmentStatus(apt.id, 'Canceled')}><XCircle className="h-3 w-3 mr-1"/>Cancel</Button>
                         </>
                       )}
                        {(apt.status === 'Scheduled' || apt.status === 'Completed') && (
@@ -142,6 +267,7 @@ export function DoctorSchedule() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            {/* TODO: This form should submit to save prescription data to Firestore */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="medication" className="text-right">Medication</Label>
               <Input id="medication" placeholder="e.g., Amoxicillin 250mg" className="col-span-3" />
@@ -161,7 +287,11 @@ export function DoctorSchedule() {
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsPrescriptionModalOpen(false)}>Cancel</Button>
-            <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground"><Send className="h-4 w-4 mr-2"/>Save Prescription</Button>
+            <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground" onClick={() => {
+              // TODO: Implement actual prescription saving logic
+              toast({title: "Prescription Saved (Mock)", description: "Prescription details would be saved."});
+              setIsPrescriptionModalOpen(false);
+            }}><Send className="h-4 w-4 mr-2"/>Save Prescription</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -181,14 +311,15 @@ export function DoctorSchedule() {
               <Textarea 
                 placeholder="Enter consultation notes, diagnosis, and follow-up plan..." 
                 id="consultation-notes" 
-                defaultValue={selectedAppointment?.notes || selectedAppointment?.reason} 
+                value={currentNotes}
+                onChange={(e) => setCurrentNotes(e.target.value)}
                 className="min-h-[120px]"
               />
             </div>
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsNotesModalOpen(false)}>Cancel</Button>
-            <Button type="submit">Save Notes</Button>
+            <Button type="button" onClick={handleSaveNotes}>Save Notes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -1,9 +1,11 @@
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -16,8 +18,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Mail, Lock, User, BriefcaseMedical } from 'lucide-react';
+import { Mail, Lock, User, BriefcaseMedical, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
+// TODO: Import Firebase auth functions and the 'auth' instance from firebase/config
+// import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+// import { auth, db } from '@/lib/firebase/config';
+// import { doc, setDoc } from 'firebase/firestore';
 
 
 const loginSchema = z.object({
@@ -42,6 +49,7 @@ type AuthFormProps = {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const schema = mode === 'login' ? loginSchema : signupSchema;
   
   const form = useForm<z.infer<typeof schema>>({
@@ -49,15 +57,52 @@ export function AuthForm({ mode }: AuthFormProps) {
     defaultValues: mode === 'login' ? { email: '', password: '' } : { fullName: '', email: '', password: '', confirmPassword: '', role: 'patient' },
   });
 
-  function onSubmit(values: z.infer<typeof schema>) {
-    // Here you would typically handle Firebase authentication
-    console.log(values);
-    toast({
-      title: mode === 'login' ? 'Login Attempted' : 'Signup Attempted',
-      description: `Form submitted with: ${JSON.stringify(values, null, 2)}`,
-    });
-    // For demonstration, we'll just log and show a toast
-    // In a real app, redirect after successful login/signup
+  async function onSubmit(values: z.infer<typeof schema>) {
+    setIsLoading(true);
+    console.log("Form values:", values);
+
+    // TODO: Implement Firebase Authentication
+    try {
+      if (mode === 'login') {
+        // const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+        // console.log('User logged in:', userCredential.user);
+        toast({
+          title: 'Login Successful (Mock)',
+          description: 'You would be redirected now.',
+        });
+        // router.push('/dashboard'); // Or role-specific dashboard
+      } else if (mode === 'signup') {
+        // const signupValues = values as z.infer<typeof signupSchema>; // Type assertion for signup
+        // const userCredential = await createUserWithEmailAndPassword(auth, signupValues.email, signupValues.password);
+        // console.log('User signed up:', userCredential.user);
+        
+        // await updateProfile(userCredential.user, { displayName: signupValues.fullName });
+
+        // Store additional user info (like role) in Firestore
+        // await setDoc(doc(db, "users", userCredential.user.uid), {
+        //   uid: userCredential.user.uid,
+        //   email: signupValues.email,
+        //   fullName: signupValues.fullName,
+        //   role: signupValues.role,
+        //   createdAt: new Date(),
+        // });
+
+        toast({
+          title: 'Signup Successful (Mock)',
+          description: 'Your account has been created. You would be redirected now.',
+        });
+        // router.push('/dashboard'); // Or role-specific dashboard
+      }
+    } catch (error: any) {
+      console.error(`${mode} error:`, error);
+      toast({
+        title: `${mode === 'login' ? 'Login' : 'Signup'} Failed`,
+        description: error.message || 'An unexpected error occurred.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -167,8 +212,8 @@ export function AuthForm({ mode }: AuthFormProps) {
             />
           </>
         )}
-        <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-          {mode === 'login' ? 'Login' : 'Sign Up'}
+        <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isLoading}>
+          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (mode === 'login' ? 'Login' : 'Sign Up')}
         </Button>
       </form>
       <p className="mt-6 text-center text-sm text-muted-foreground">
