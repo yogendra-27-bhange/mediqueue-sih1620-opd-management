@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { CalendarPlus, History, UserCircle, FileText, MessageCircle, MapPin, BedDouble, Pill, Stethoscope, AlertTriangle, Video } from 'lucide-react';
 import Image from 'next/image';
 import { EmergencySOSButton } from '@/components/patient/emergency-sos-button';
+import { Badge } from '@/components/ui/badge'; // Added this import
 
 // Mock data for upcoming appointments
 const mockUpcomingAppointments = [

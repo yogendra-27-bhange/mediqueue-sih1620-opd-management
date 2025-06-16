@@ -6,8 +6,7 @@ import { getFirestore } from 'firebase/firestore';
 // import { getAnalytics } from "firebase/analytics"; // Uncomment if you need Analytics
 
 // Your web app's Firebase configuration
-// IMPORTANT: Replace these with your actual Firebase project's configuration!
-// It's highly recommended to use environment variables for these values.
+// These values will be loaded from your .env.local file (NEXT_PUBLIC_... variables)
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -15,7 +14,7 @@ const firebaseConfig: FirebaseOptions = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  // measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID, // Uncomment if you use Analytics
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID, // Optional: remove if not using Analytics or not set
 };
 
 // Initialize Firebase
@@ -32,6 +31,7 @@ const db = getFirestore(app);
 
 export { app, auth, db };
 
-// console.warn(
-//   "Firebase configuration loaded. Ensure your .env.local file has the correct NEXT_PUBLIC_FIREBASE_... variables set."
+// console.log(
+//   "Firebase config loaded. Ensure .env.local has NEXT_PUBLIC_FIREBASE_... variables."
 // );
+// console.log("Project ID from env:", process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID);

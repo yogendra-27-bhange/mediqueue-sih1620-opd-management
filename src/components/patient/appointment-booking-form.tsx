@@ -31,6 +31,7 @@ import { cn } from '@/lib/utils';
 import { CalendarIcon, Loader2, Send, Video, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label'; // Added this import
 
 // TODO: When integrating Firebase:
 // import { auth, db } from '@/lib/firebase/config';
@@ -94,11 +95,11 @@ export function AppointmentBookingForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       reasonForVisit: '',
-      patientPhoneNumber: '', 
+      patientPhoneNumber: '',
       appointmentMode: 'in-person',
     }
   });
-  
+
   useEffect(() => {
     // TODO: Fetch departments and doctors from Firestore instead of using mock data
     if (selectedDepartment) {
@@ -205,11 +206,11 @@ export function AppointmentBookingForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Department</FormLabel>
-              <Select 
+              <Select
                 onValueChange={(value) => {
                   field.onChange(value);
                   setSelectedDepartment(value);
-                }} 
+                }}
                 defaultValue={field.value}
               >
                 <FormControl>
@@ -252,7 +253,7 @@ export function AppointmentBookingForm() {
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="appointmentMode"
@@ -353,7 +354,7 @@ export function AppointmentBookingForm() {
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="reasonForVisit"
@@ -388,5 +389,3 @@ export function AppointmentBookingForm() {
     </Form>
   );
 }
-
-    
