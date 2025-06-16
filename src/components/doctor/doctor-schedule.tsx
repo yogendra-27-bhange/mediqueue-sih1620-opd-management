@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -325,7 +324,7 @@ export function DoctorSchedule() {
             <DialogTitle className="font-headline">Consultation Notes for {selectedAppointment?.patientName}</DialogTitle>
             <DialogDescription>
               View or update consultation notes for this appointment.
-            </Description>
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
              <div className="grid w-full gap-1.5">
