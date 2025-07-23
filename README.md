@@ -1,4 +1,4 @@
-# MediQueue - Hospital Appointment System
+# MediQueue - Hospital Appointment System.
 
 A modern and efficient hospital appointment management system built with Next.js and Firebase.
 
